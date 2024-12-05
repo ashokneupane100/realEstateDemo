@@ -1,5 +1,5 @@
 "use client"
-import { Button } from '@/components/ui/button'
+import { Button } from '../../components/ui/button'
 import { SignOutButton, UserButton, useUser } from '@clerk/nextjs'
 import { Plus } from 'lucide-react'
 import Image from 'next/image'
@@ -13,7 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "../../components/ui/dropdown-menu"
 
 function Header() {
   const path = usePathname();
