@@ -1,59 +1,85 @@
-"use client";
-import React, { useEffect } from "react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+"use client"
+import { Button } from '@/components/ui/button'
+import { SignOutButton, UserButton, useUser } from '@clerk/nextjs'
+import { Plus } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import React, { useEffect } from 'react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 function Header() {
   const path = usePathname();
-
+  const { user, isSignedIn } = useUser();
   useEffect(() => {
-
     console.log(path)
-
-}, []);
-
+  }, [])
   return (
-    <div className="p-6 px-10 flex justify-between items-center shadow-sm fixed top-0 w-full z-10 bg-blue-100">
-      {/* Logo Section */}
-      <div className="hidden md:flex gap-10 items-center">
-        <Image src="/logo.svg" width={150} height={150} alt="Home Logo" />
-      </div>
-
-      {/* Navigation Links */}
-      <div className="hidden md:flex gap-10 items-center">
-        <ul className="flex gap-10">
-          <Link href={"/"}>
-            {" "}
-            <li className="hover:text-blue-600 cursor-pointer font-bold">
-              For Sale
-            </li>
+    <div className='p-6 px-10 flex justify-between shadow-sm fixed top-0 w-full z-10 bg-white'>
+      <div className='flex gap-12 items-center'>
+        <Link href={'/'}>
+        <Image src={'/logo.svg'} width={150}
+          height={150} alt='logo' />
           </Link>
-          <Link href={"/about"}>
-            {" "}
-            <li className="hover:text-blue-600 cursor-pointer font-bold">
-              About
-            </li>
+        <ul className='hidden md:flex gap-10'>
+          <Link href={'/'} >
+            <li className={`'hover:text-primary 
+                 font-medium text-sm cursor-pointer'
+                 ${path == '/' && 'text-primary'}`}>For Sell</li>
           </Link>
-          <Link href={"/agent-finder"}>
-            {" "}
-            <li className="hover:text-purple-600 cursor-pointer font-bold">
-              Agent Finder
-            </li>
+          <Link href={'/rent'} >
+            <li className={`'hover:text-primary 
+                 font-medium text-sm cursor-pointer'
+                 ${path == '/rent' && 'text-primary'}`}>For Rent</li>
           </Link>
+          <li className='hover:text-primary font-medium text-sm cursor-pointer'>Agent Finder</li>
         </ul>
       </div>
+      <div className='flex gap-2 items-center'>
+      <Link href={'/add-new-listing'}>
+        <Button className="flex gap-2"><Plus className='h-5 w-5' /> Post Your Ad</Button>
+        </Link>
+        {isSignedIn ?
+        
+          <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Image src={user?.imageUrl} 
+            width={35} height={35} alt='user profile'
+            className='rounded-full'
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+             <Link href={'/user'}>Profile</Link> 
+              </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={'/user#/my-listing'}>
+              My Listing
+              </Link></DropdownMenuItem>
+             
+            <DropdownMenuItem> <SignOutButton>Logout</SignOutButton> </DropdownMenuItem>
+           
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-      {/* Action Buttons */}
-      <div className="flex gap-4">
-        <Button className="flex gap-2">
-          <Plus className="h-5 w-5" /> Post Your Ad
-        </Button>
-        <Button variant="outline">Login</Button>
+          : 
+          <Link href={'/sign-in'}>
+          <Button variant="outline">Login</Button>
+          </Link>
+        }
+
       </div>
     </div>
-  );
+  )
 }
 
-export default Header;
+export default Header
