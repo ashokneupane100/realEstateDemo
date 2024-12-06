@@ -1,6 +1,12 @@
+// utils/supabase/client.js
+import { createClient } from '@supabase/supabase-js';
 
-import { createClient } from '@supabase/supabase-js'
+const supabaseUrl = 'https://ktceocdocbuhokgehohd.supabase.co';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY;
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)
+if (!supabaseUrl || !supabaseKey) {
+    console.error('Supabase environment variables are missing.');
+    throw new Error('Missing Supabase URL or API Key.');
+}
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
